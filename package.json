@@ -25,5 +25,8 @@
     "@babel/core": "^7.25.2",
     "@babel/runtime": "^7.25.0"
   },
-  "private": true
+  "private": true,
+  "overrides": {
+    "nanoid": "3.3.7"
+  }
 }
