@@ -1,10 +1,9 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import BrowseScreen from './src/screens/BrowseScreen';
@@ -34,33 +33,28 @@ function SearchStack() {
 
 export default function App() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <StatusBar style="light" />
-          <Tab.Navigator
-            screenOptions={({ route }) => ({
-              headerShown: false,
-              tabBarStyle: {
-                backgroundColor: '#111',
-                borderTopColor: '#222',
-              },
-              tabBarActiveTintColor: '#fff',
-              tabBarInactiveTintColor: '#555',
-              tabBarIcon: ({ color, size }) => {
-                const icons = {
-                  Browse: 'grid-outline',
-                  Search: 'search-outline',
-                };
-                return <Ionicons name={icons[route.name]} size={size} color={color} />;
-              },
-            })}
-          >
-            <Tab.Screen name="Browse" component={BrowseStack} />
-            <Tab.Screen name="Search" component={SearchStack} />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <StatusBar style="light" />
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            headerShown: false,
+            tabBarStyle: { backgroundColor: '#111', borderTopColor: '#222' },
+            tabBarActiveTintColor: '#fff',
+            tabBarInactiveTintColor: '#555',
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons
+                name={route.name === 'Browse' ? 'grid-outline' : 'search-outline'}
+                size={size}
+                color={color}
+              />
+            ),
+          })}
+        >
+          <Tab.Screen name="Browse" component={BrowseStack} />
+          <Tab.Screen name="Search" component={SearchStack} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }

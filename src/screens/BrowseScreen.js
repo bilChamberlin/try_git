@@ -1,13 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  FlatList,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  StyleSheet,
-  RefreshControl,
-} from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, ActivityIndicator, StyleSheet, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ExhibitCard from '../components/ExhibitCard';
 import { fetchShows } from '../api/artsy';
@@ -26,8 +18,8 @@ export default function BrowseScreen({ navigation }) {
 
   const load = useCallback(async (status, pageNum, replace = false) => {
     try {
-      const results = await fetchShows({ status, page: pageNum, size: 20 });
-      setShows((prev) => (replace ? results : [...prev, ...results]));
+      const results = await fetchShows({ status, page: pageNum });
+      setShows(prev => replace ? results : [...prev, ...results]);
       setHasMore(results.length === 20);
     } catch (e) {
       setError(e.message);
@@ -61,24 +53,17 @@ export default function BrowseScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <Text style={styles.header}>Exhibits</Text>
-
-      {/* Tabs */}
       <View style={styles.tabs}>
-        {TABS.map((t) => (
-          <TouchableOpacity
-            key={t}
-            style={[styles.tab, tab === t && styles.tabActive]}
-            onPress={() => setTab(t)}
-          >
+        {TABS.map(t => (
+          <TouchableOpacity key={t} style={[styles.tab, tab === t && styles.tabActive]} onPress={() => setTab(t)}>
             <Text style={[styles.tabText, tab === t && styles.tabTextActive]}>
               {t.charAt(0).toUpperCase() + t.slice(1)}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
-
       {loading ? (
-        <ActivityIndicator style={styles.center} color="#fff" size={36} />
+        <ActivityIndicator style={styles.center} color="#fff" />
       ) : error ? (
         <View style={styles.center}>
           <Text style={styles.errorText}>{error}</Text>
@@ -89,23 +74,16 @@ export default function BrowseScreen({ navigation }) {
       ) : (
         <FlatList
           data={shows}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <ExhibitCard
-              show={item}
-              onPress={() => navigation.navigate('Detail', { show: item })}
-            />
+            <ExhibitCard show={item} onPress={() => navigation.navigate('Detail', { show: item })} />
           )}
           contentContainerStyle={styles.list}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#fff" />}
           onEndReached={onEndReached}
           onEndReachedThreshold={0.4}
-          ListFooterComponent={
-            loadingMore ? <ActivityIndicator color="#888" style={{ marginVertical: 16 }} /> : null
-          }
-          ListEmptyComponent={
-            <Text style={styles.empty}>No exhibits found.</Text>
-          }
+          ListFooterComponent={loadingMore ? <ActivityIndicator color="#888" style={{ marginVertical: 16 }} /> : null}
+          ListEmptyComponent={<Text style={styles.empty}>No exhibits found.</Text>}
         />
       )}
     </SafeAreaView>
@@ -114,26 +92,9 @@ export default function BrowseScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0a0a' },
-  header: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#fff',
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 12,
-  },
-  tabs: {
-    flexDirection: 'row',
-    paddingHorizontal: 16,
-    marginBottom: 12,
-    gap: 8,
-  },
-  tab: {
-    paddingHorizontal: 18,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: '#1a1a1a',
-  },
+  header: { fontSize: 28, fontWeight: '800', color: '#fff', paddingHorizontal: 16, paddingTop: 8, paddingBottom: 12 },
+  tabs: { flexDirection: 'row', paddingHorizontal: 16, marginBottom: 12, gap: 8 },
+  tab: { paddingHorizontal: 18, paddingVertical: 8, borderRadius: 20, backgroundColor: '#1a1a1a' },
   tabActive: { backgroundColor: '#fff' },
   tabText: { color: '#888', fontWeight: '600', fontSize: 14 },
   tabTextActive: { color: '#000' },
