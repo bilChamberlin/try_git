@@ -78,7 +78,7 @@ export default function BrowseScreen({ navigation }) {
       </View>
 
       {loading ? (
-        <ActivityIndicator style={styles.center} color="#fff" size="large" />
+        <ActivityIndicator style={styles.center} color="#fff" size={36} />
       ) : error ? (
         <View style={styles.center}>
           <Text style={styles.errorText}>{error}</Text>
